@@ -47,7 +47,7 @@ public class RequestServiceImpl implements RequestService{
 
     @Override
     public List<RequestResponse> getRequestsByDoctor(long id, String status) {
-        List<Request> requests = this.requestRepo.getRequestsByPathologist(id, status);
+        List<Request> requests = this.requestRepo.getRequestsByDoctor(id, status);
         List<RequestResponse> responses = new ArrayList<>();
         for(Request request:requests){
             RequestResponse response = new RequestResponse();
