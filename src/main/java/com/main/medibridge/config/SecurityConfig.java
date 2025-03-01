@@ -1,6 +1,5 @@
 package com.main.medibridge.config;
 import java.util.Arrays;
-import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +19,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 import com.main.medibridge.Helper.Role;
 import com.main.medibridge.JwtSecurity.CustomeUserDetail;
-import com.main.medibridge.JwtSecurity.JwtConstants;
 import com.main.medibridge.JwtSecurity.JwtValidator;
 
 
