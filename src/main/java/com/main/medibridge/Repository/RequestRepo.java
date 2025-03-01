@@ -13,9 +13,9 @@ import com.main.medibridge.entities.Request;
 public interface RequestRepo extends JpaRepository<Request, Long> {
 
 
-    @Query("SELECT r FROM Request r WHERE r.id = :id AND (:status IS NULL OR r.status = :status)")
+    @Query("SELECT r FROM Request r WHERE r.pathologistId= :id AND (:status IS NULL OR r.status = :status)")
     List<Request> getRequestsByPathologist(@Param("id")long id,@Param("status") String status);
 
-    @Query("SELECT r FROM Request r WHERE r.id = :id AND (:status IS NULL OR r.status = :status)")
+    @Query("SELECT r FROM Request r WHERE r.doctorId = :id AND (:status IS NULL OR r.status = :status)")
     List<Request> getRequestsByDoctor(@Param("id")long id,@Param("status") String status);
 }
