@@ -100,7 +100,7 @@ public class DoctorController {
         DataReponse response = new DataReponse();
         User user = this.userServiceImpl.getUserByJwt(jwt);
         try{
-             response.setData(this.requestServiceImpl.getRequestsByPathologist(user.getId(), status));
+             response.setData(this.requestServiceImpl.getRequestsByDoctor(user.getId(), status));
             response.setMessage("request get successfully!");
             response.setStatus(HttpStatus.OK);
             response.setStatusCode(200);
