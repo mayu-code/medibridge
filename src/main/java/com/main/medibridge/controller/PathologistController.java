@@ -2,19 +2,14 @@ package com.main.medibridge.controller;
 
 import java.util.Optional;
 
-import javax.xml.crypto.Data;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.main.medibridge.Dto.DataReponse;
-import com.main.medibridge.Dto.SuccessResponse;
-import com.main.medibridge.entities.Request;
 
 @RestController
 @RequestMapping("/pathologist")

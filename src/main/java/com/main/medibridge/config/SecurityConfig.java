@@ -42,6 +42,7 @@ public class SecurityConfig {
             .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/user/**").hasAnyRole(Role.DOCTOR.toString(),Role.PATHOLOGIST.toString())
                 .requestMatchers("/doctor/**").hasAnyRole(Role.DOCTOR.toString())
                 .requestMatchers("/pathologist/**").hasRole(Role.PATHOLOGIST.toString())
                 .anyRequest().permitAll())
