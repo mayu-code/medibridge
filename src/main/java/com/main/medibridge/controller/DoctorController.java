@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.main.medibridge.Dto.DataReponse;
 import com.main.medibridge.Dto.SuccessResponse;
+import com.main.medibridge.Helper.RequestStatus;
 import com.main.medibridge.entities.Patient;
 import com.main.medibridge.entities.Relation;
 import com.main.medibridge.entities.Request;
@@ -80,6 +81,7 @@ public class DoctorController {
     public ResponseEntity<SuccessResponse> sendRequest(@RequestBody Request request){
         SuccessResponse response = new SuccessResponse();
         try{
+            request.setStatus(RequestStatus.PENDING);
             this.requestServiceImpl.addRequest(request);  
             response.setMessage("request sended successfully!");
             response.setStatus(HttpStatus.OK);

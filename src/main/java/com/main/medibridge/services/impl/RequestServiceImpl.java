@@ -29,5 +29,10 @@ public class RequestServiceImpl implements RequestService{
     public List<Request> getRequestsByDoctor(long id, String status) {
         return this.requestRepo.getRequestsByDoctor(id, status);
     }
+
+    @Override
+    public Request getRequestById(long id) {
+        return this.requestRepo.findById(id).get();
+    }
     
 }

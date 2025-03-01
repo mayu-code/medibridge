@@ -17,8 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.main.medibridge.Dto.DataReponse;
 import com.main.medibridge.Dto.SuccessResponse;
+import com.main.medibridge.Helper.RequestStatus;
+import com.main.medibridge.entities.Patient;
+import com.main.medibridge.entities.Relation;
 import com.main.medibridge.entities.Report;
+import com.main.medibridge.entities.Request;
 import com.main.medibridge.entities.User;
+import com.main.medibridge.services.impl.PatienctServiceImpl;
 import com.main.medibridge.services.impl.RequestServiceImpl;
 import com.main.medibridge.services.impl.UserServiceImpl;
 
@@ -32,6 +37,9 @@ public class PathologistController {
 
     @Autowired
     private RequestServiceImpl requestServiceImpl;
+
+    @Autowired
+    private PatienctServiceImpl patienctServiceImpl;
     
     @GetMapping("/getAllRequests")
     public ResponseEntity<DataReponse> getRequests(@RequestHeader("Authorization")String jwt,@RequestParam(required = false) String status){
@@ -54,7 +62,9 @@ public class PathologistController {
     @PostMapping("/makeReport")
     public ResponseEntity<SuccessResponse> makeReport(@RequestBody Report report){
         SuccessResponse response = new SuccessResponse();
-        
+        Request request = this.requestServiceImpl.getRequestById(report.getRequestId());
+        request.setStatus(RequestStatus.COMPLETED);
+        this.requestServiceImpl.addRequest(request);
         try{
             response.setMessage("request get successfully!");
             response.setStatus(HttpStatus.OK);
@@ -71,8 +81,15 @@ public class PathologistController {
     @PostMapping("/acceptRequest/{requestId}")
     public ResponseEntity<SuccessResponse> acceptRequest(@PathVariable("requestId")long id){
         SuccessResponse response = new SuccessResponse();
-        
+
         try{
+            Request request = this.requestServiceImpl.getRequestById(id);
+            request.setStatus(RequestStatus.ACCEPTED);
+            this.requestServiceImpl.addRequest(request);
+
+            Relation relation = new Relation();
+            
+
             response.setMessage("request get successfully!");
             response.setStatus(HttpStatus.OK);
             response.setStatusCode(200);

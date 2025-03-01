@@ -49,8 +49,25 @@ public class UserController {
         DataReponse response = new DataReponse();
         User user = this.userServiceImpl.getUserByJwt(jwt);
         try{
-            response.setData(this.patienctServiceImpl.getPatientById(user.getId()));
-            response.setMessage("pending request get successfully!");
+            response.setData(this.patienctServiceImpl.getPatientbyUserId(user.getId()));
+            response.setMessage("get All Patients successfully!");
+            response.setStatus(HttpStatus.OK);
+            response.setStatusCode(200);
+            return ResponseEntity.of(Optional.of(response));
+        }catch(Exception e){
+            response.setMessage(e.getMessage());
+            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            response.setStatusCode(500);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @GetMapping("/getAllPathologists")
+    public ResponseEntity<DataReponse> getAllPathologists(){
+        DataReponse response = new DataReponse();
+        try{
+            response.setData(this.userServiceImpl.getAllPathologists());
+            response.setMessage("get All Pathologists successfully!");
             response.setStatus(HttpStatus.OK);
             response.setStatusCode(200);
             return ResponseEntity.of(Optional.of(response));
