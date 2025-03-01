@@ -18,4 +18,5 @@ public class Patient {
     private String gender;
     private String mobileNo;
     private String email;
+    private String date;
 }

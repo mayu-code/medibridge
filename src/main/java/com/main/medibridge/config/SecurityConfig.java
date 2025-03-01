@@ -65,10 +65,10 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         return request -> {
             CorsConfiguration cfg = new CorsConfiguration();
-            cfg.setAllowedOrigins(Arrays.asList("*"));
-            cfg.setAllowedMethods(Collections.singletonList("*"));
+            cfg.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://localhost:5174"));
+            cfg.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+            cfg.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
             cfg.setAllowCredentials(true);
-            cfg.setExposedHeaders(Arrays.asList(JwtConstants.JWT_HEADER, "content-type"));
             cfg.setMaxAge(3600L);
             return cfg;
         };
