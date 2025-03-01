@@ -24,6 +24,7 @@ import com.main.medibridge.entities.Report;
 import com.main.medibridge.entities.Request;
 import com.main.medibridge.entities.User;
 import com.main.medibridge.services.impl.PatienctServiceImpl;
+import com.main.medibridge.services.impl.RelationServiceImpl;
 import com.main.medibridge.services.impl.RequestServiceImpl;
 import com.main.medibridge.services.impl.UserServiceImpl;
 
@@ -40,6 +41,9 @@ public class PathologistController {
 
     @Autowired
     private PatienctServiceImpl patienctServiceImpl;
+
+    @Autowired
+    private RelationServiceImpl relationServiceImpl;
     
     @GetMapping("/getAllRequests")
     public ResponseEntity<DataReponse> getRequests(@RequestHeader("Authorization")String jwt,@RequestParam(required = false) String status){
@@ -79,16 +83,18 @@ public class PathologistController {
     }
 
     @PostMapping("/acceptRequest/{requestId}")
-    public ResponseEntity<SuccessResponse> acceptRequest(@PathVariable("requestId")long id){
+    public ResponseEntity<SuccessResponse> acceptRequest(@RequestHeader("Authorization")String jwt,@PathVariable("requestId")long id){
         SuccessResponse response = new SuccessResponse();
-
+        User user = this.userServiceImpl.getUserByJwt(jwt);
         try{
             Request request = this.requestServiceImpl.getRequestById(id);
             request.setStatus(RequestStatus.ACCEPTED);
             this.requestServiceImpl.addRequest(request);
 
             Relation relation = new Relation();
-            
+            relation.setPatientId(request.getPatientId());
+            relation.setUserId(user.getId());
+            this.relationServiceImpl.addRelation(relation);
 
             response.setMessage("request get successfully!");
             response.setStatus(HttpStatus.OK);
