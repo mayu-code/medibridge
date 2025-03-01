@@ -1,8 +1,11 @@
 package com.main.medibridge.services.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.main.medibridge.Helper.Role;
 import com.main.medibridge.JwtSecurity.JwtProvider;
 import com.main.medibridge.Repository.UserRepo;
 import com.main.medibridge.entities.User;
@@ -33,6 +36,11 @@ public class UserServiceImpl implements UserService{
     public User getUserByJwt(String jwt) {
         String email = JwtProvider.getEmailFromJwt(jwt);
         return this.userRepo.findByEmail(email);
+    }
+
+    @Override
+    public List<User> getAllPathologists() {
+        return this.userRepo.getAllPathologists(Role.PATHOLOGIST);
     }
     
 }

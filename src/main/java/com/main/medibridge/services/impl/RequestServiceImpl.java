@@ -1,5 +1,7 @@
 package com.main.medibridge.services.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,16 @@ public class RequestServiceImpl implements RequestService{
     @Override
     public Request addRequest(Request request) {
         return this.requestRepo.save(request);
+    }
+
+    @Override
+    public List<Request> getRequestsByPathologist(long id, String status) {
+        return this.requestRepo.getRequestsByPathologist(id, status);
+    }
+
+    @Override
+    public List<Request> getRequestsByDoctor(long id, String status) {
+        return this.requestRepo.getRequestsByDoctor(id, status);
     }
     
 }
