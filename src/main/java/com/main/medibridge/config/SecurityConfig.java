@@ -18,6 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import com.main.medibridge.Helper.Role;
 import com.main.medibridge.JwtSecurity.CustomeUserDetail;
 import com.main.medibridge.JwtSecurity.JwtConstants;
 import com.main.medibridge.JwtSecurity.JwtValidator;
@@ -41,8 +42,9 @@ public class SecurityConfig {
             .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/admin/**").hasAnyRole("ADMIN")
-                .anyRequest().authenticated())
+                .requestMatchers("/doctor/**").hasAnyRole(Role.DOCTOR.toString())
+                .requestMatchers("/pathologist/**").hasRole(Role.PATHOLOGIST.toString())
+                .anyRequest().permitAll())
             .addFilterBefore(new JwtValidator(), UsernamePasswordAuthenticationFilter.class)
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))

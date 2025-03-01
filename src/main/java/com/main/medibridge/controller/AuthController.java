@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.main.medibridge.Dto.LoginReponse;
 import com.main.medibridge.Dto.LoginRequest;
 import com.main.medibridge.Dto.RegisterRequest;
 import com.main.medibridge.Dto.SuccessResponse;
@@ -66,38 +67,43 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> signIn(@RequestBody LoginRequest request) {
-        // User user = this.userServiceImpl.getUserByEmail(request.getEmail());
-        // if (user == null) {
-        //     SuccessResponse response = new SuccessResponse();
-        //     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        // }
+    public ResponseEntity<LoginReponse> signIn(@RequestBody LoginRequest request) {
+        User user = this.userServiceImpl.getUserByEmail(request.getEmail());
+        LoginReponse response = new LoginReponse();
+        if (user == null) {
+            response.setMessage("User Not Found !");
+            response.setStatus(HttpStatus.BAD_REQUEST);
+            response.setStatusCode(200);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
 
-        // UserDetails userDetails = this.customerUserDetail.loadUserByUsername(request.getEmail());
-        // boolean isMatchPassword = new BCryptPasswordEncoder().matches(request.getPassword(), userDetails.getPassword());
-        // if (!isMatchPassword) {
-        //     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
-        // }
+        UserDetails userDetails = this.customerUserDetail.loadUserByUsername(request.getEmail());
+        boolean isMatchPassword = new BCryptPasswordEncoder().matches(request.getPassword(), userDetails.getPassword());
+        if(!isMatchPassword){
+            response.setMessage("incorect password !");
+            response.setStatus(HttpStatus.BAD_REQUEST);
+            response.setStatusCode(200);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
 
-        // Authentication authentication = authentication(request.getEmail(), request.getPassword());
-        // String jwt = JwtProvider.generateJwtToken(authentication);
+        Authentication authentication = authentication(request.getEmail(), request.getPassword());
+        String jwt = JwtProvider.generateJwtToken(authentication);
 
-        // LoginResponse response = new LoginResponse();
-        // response.setHttpStatus(HttpStatus.OK);
-        // response.setToken(jwt);
-        // response.setRole(user.getRole().toString());
-        // response.setMessage("Login successful");
-        // response.setStatusCode(200);
+        response.setStatus(HttpStatus.OK);
+        response.setToken(jwt);
+        response.setRole(user.getRole().toString());
+        response.setMessage("login successful");
+        response.setStatusCode(200);
 
-        // return ResponseEntity.ok(response);
-        return null;
+        return ResponseEntity.of(Optional.of(response));
     }
 
-    public Authentication authentication(String email, String password) {
+
+    public Authentication authentication(String email,String password){
         UserDetails userDetails = this.customerUserDetail.loadUserByUsername(email);
-        if (userDetails == null) {
-            throw new UsernameNotFoundException("Invalid credentials");
+        if(userDetails==null){
+            throw new UsernameNotFoundException("Invalid credentials ");
         }
-        return new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(userDetails,password ,userDetails.getAuthorities());
     }
 }
