@@ -1,8 +1,10 @@
 package com.main.medibridge.controller;
 
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.main.medibridge.Dto.DataReponse;
 import com.main.medibridge.Dto.SuccessResponse;
+import com.main.medibridge.Helper.MailFormater;
 import com.main.medibridge.Helper.RequestStatus;
 import com.main.medibridge.entities.Patient;
 import com.main.medibridge.entities.Relation;
@@ -25,6 +28,7 @@ import com.main.medibridge.entities.Request;
 import com.main.medibridge.entities.User;
 import com.main.medibridge.services.impl.PatienctServiceImpl;
 import com.main.medibridge.services.impl.RelationServiceImpl;
+import com.main.medibridge.services.impl.ReportServiceImpl;
 import com.main.medibridge.services.impl.RequestServiceImpl;
 import com.main.medibridge.services.impl.UserServiceImpl;
 
@@ -44,6 +48,12 @@ public class PathologistController {
 
     @Autowired
     private RelationServiceImpl relationServiceImpl;
+
+    @Autowired
+    private ReportServiceImpl reportServiceImpl;
+
+    @Autowired
+    private MailFormater mailFormater;
     
     @GetMapping("/getAllRequests")
     public ResponseEntity<DataReponse> getRequests(@RequestHeader("Authorization")String jwt,@RequestParam(required = false) String status){
@@ -66,10 +76,16 @@ public class PathologistController {
     @PostMapping("/makeReport")
     public ResponseEntity<SuccessResponse> makeReport(@RequestBody Report report){
         SuccessResponse response = new SuccessResponse();
+
         Request request = this.requestServiceImpl.getRequestById(report.getRequestId());
         request.setStatus(RequestStatus.COMPLETED);
         this.requestServiceImpl.addRequest(request);
+
+        Patient patient = this.patienctServiceImpl.getPatientById(request.getPatientId());
+        report.setPatient(patient);
+        this.reportServiceImpl.addReport(report);
         try{
+            CompletableFuture.runAsync(() -> this.mailFormater.formatMail(patient, report));
             response.setMessage("request get successfully!");
             response.setStatus(HttpStatus.OK);
             response.setStatusCode(200);
