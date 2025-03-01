@@ -38,7 +38,7 @@ public class AuthController {
     private CustomeUserDetail customerUserDetail;
     
     @PostMapping("/register")
-    public ResponseEntity<?> signUp(@RequestBody RegisterRequest request) {
+    public ResponseEntity<SuccessResponse> signUp(@RequestBody RegisterRequest request) {
         SuccessResponse response = new SuccessResponse();
         User user = new User();
 
