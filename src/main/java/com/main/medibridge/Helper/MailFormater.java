@@ -8,12 +8,15 @@ import com.main.medibridge.entities.Patient;
 import com.main.medibridge.entities.Report;
 import com.main.medibridge.services.MailService;
 
+import jakarta.transaction.Transactional;
+
 @Component
 public class MailFormater {
 
     @Autowired
     private  MailService mailService;
 
+    @Transactional
     @Async("taskExecutor")
     public  void formatMail(Patient patient, Report report) {
         String emailBody = "Dear " + patient.getName() + ",\n\n" +
