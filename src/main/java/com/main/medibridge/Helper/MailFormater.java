@@ -12,10 +12,10 @@ import com.main.medibridge.services.MailService;
 public class MailFormater {
 
     @Autowired
-    private MailService mailService;
+    private  MailService mailService;
 
     @Async("taskExecutor")
-    public void formatMail(Patient patient, Report report) {
+    public  void formatMail(Patient patient, Report report) {
         String emailBody = "Dear " + patient.getName() + ",\n\n" +
                 "Your medical report is now available. Please find the details below:\n\n" +
                 "🔹 **Patient Details:**\n" +
