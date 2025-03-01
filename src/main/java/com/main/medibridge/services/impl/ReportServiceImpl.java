@@ -1,5 +1,6 @@
 package com.main.medibridge.services.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.main.medibridge.Repository.ReportRepo;
@@ -9,6 +10,7 @@ import com.main.medibridge.services.ServiceInterface.ReportService;
 @Service
 public class ReportServiceImpl implements ReportService{
 
+    @Autowired
     private ReportRepo reportRepo;
 
     @Override
