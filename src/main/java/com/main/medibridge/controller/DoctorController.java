@@ -77,7 +77,7 @@ public class DoctorController {
         }
     }
 
-    @GetMapping("/sendRequest")
+    @PostMapping("/sendRequest")
     public ResponseEntity<SuccessResponse> sendRequest(@RequestBody Request request){
         SuccessResponse response = new SuccessResponse();
         try{
