@@ -7,4 +7,5 @@ public interface UserService {
     User addUser(User user);
     User getUserById(long id);
     User getUserByEmail(String email);
+    User getUserByJwt(String jwt);
 }

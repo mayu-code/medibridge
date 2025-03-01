@@ -73,7 +73,7 @@ public class AuthController {
         if (user == null) {
             response.setMessage("User Not Found !");
             response.setStatus(HttpStatus.BAD_REQUEST);
-            response.setStatusCode(200);
+            response.setStatusCode(400);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
